@@ -1,0 +1,35 @@
+body {
+    display: grid;
+    grid-template-rows: 1fr 8fr;
+    height: 100vh;
+    font-family: 'Comic Sans MS';
+}
+#header {
+    text-align: center;
+    padding: 24px;
+    font-size: 48px;
+    color: black;
+}
+#main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#board {
+    width: 60%;
+    display: grid;
+    justify-content: space-around;
+    gap: 1px;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    font-size: 72px;
+    width: 500px;
+    height: 500px;
+    color: red;
+}
+.square {
+    border: 3px black solid;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
