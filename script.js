@@ -12,6 +12,7 @@ const gameBoard = (() => {
     squares.forEach((square, index) => {
         square.addEventListener('click', () => {
             // update display
+            square.classList.add(game.activePlayer.marker);
             square.textContent = game.activePlayer.marker;
             // update array value to be that of active player
             board[index] = game.activePlayer.marker;
@@ -22,16 +23,25 @@ const gameBoard = (() => {
 
             game.checkWinner();
             // check remaining spots
-            if (game.winnerDeclared == false) {
+            if (game.winnerDeclared === false) {
                 if (game.remainingSpots > 0) {
                     game.alertNextPlayer();
                     game.nextPlayer();
                 } else if (game.remainingSpots == 0) {
                     game.declareTie();
                 }
+            } else {
+                endGame();
             }
         })
     });
+
+    function endGame() {
+        squares.forEach((square) => {
+            square.style.pointerEvents = 'none';
+        });
+    }
+
     return {
         board
     };
@@ -47,6 +57,9 @@ const game = (() => {
     let winnerDeclared = false;
     let remainingSpots = 9;
 
+    let subtext = document.querySelector('.subtext'); // display winner/tie
+    let playerName = document.querySelector('.player-name'); // purpose: alert player turn
+
     // winning conditions
     const winningAxes = [
         [0,1,2],
@@ -59,9 +72,35 @@ const game = (() => {
         [2,4,6],
     ];
 
-    // myModule.anotherPublicMethod = function () {
-  
-    // };
+    function checkWinner() {
+        winningAxes.forEach((item) => {
+            if (gameBoard.board[item[0]] === activePlayer.marker && 
+                    gameBoard.board[item[1]] === activePlayer.marker && 
+                    gameBoard.board[item[2]] === activePlayer.marker) {
+                console.log("Winner!");
+                subtext.textContent = `${activePlayer.name} wins!`;
+                playerName.textContent = "";
+                this.winnerDeclared = true;
+            }
+        });
+    }
+
+    function alertNextPlayer() {
+        this.activePlayer === playerOne ? playerName.textContent = 
+            "Player 2's Turn" : playerName.textContent = "Player 1's Turn";
+    }
+
+    function nextPlayer() {
+        this.activePlayer === playerOne ? this.activePlayer = playerTwo : 
+            this.activePlayer = playerOne;
+    }
+
+    function declareTie() {
+        console.log("Tie!");
+        subtext.textContent = "It's a tie!";
+        playerName.textContent = "";
+    }
+
     return {
         activePlayer,
         winnerDeclared,
